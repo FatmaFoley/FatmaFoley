@@ -1,0 +1,215 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<utility>
+#include<ostream>
+#include<algorithm>
+using namespace std;
+    void list()
+    {
+        cout<<"1. Add students to system\n"<<"2. Modify a name or a grade\n"<<"3. Reset a grade\n"<<"4. Get a student's grade\n"<<"5. Get all grades\n"<<"6. Close";
+    }
+    int number()
+    {
+        int i;
+        cin>>i;
+        return i;
+    }
+    bool compare(pair<string,int>&v1 , pair<string,int>&v2)
+    {
+        if(v1.second==v2.second)
+    {
+        return (v1.first < v2.first);
+    }
+    return v1.second > v2.second;
+    }
+int main()
+{
+    int num_student,f,position1,name_exist,position2,position3;
+    string name;
+    int grade;
+    vector<pair<string, int>> student_data;
+    system:
+    int j=0;
+    list();
+    switch(number())
+    {
+        case 1:
+        {
+            cout << "How many students would you like to add ? ";
+            cin >> num_student;
+            while (num_student--)
+            {
+                cout<<"Please enter the full name of the student : ";
+                getline(cin >> ws , name);
+                for (int g = 0; g < student_data.size(); g++)
+                {
+                    if (student_data[g].first == name)
+                    {
+                        name_exist = 1;
+                        break;
+                    }
+                    else
+                        name_exist = 0;
+                }
+                if(name_exist)
+                {
+                    cout<<"Do you mean to modify her/his grade ?\n\n";
+                    goto system;
+                }
+                else
+                {
+                    cout<<"Please enter a valid grade between 0 and 1500 : ";
+                    check:
+                    cin >> grade;
+                    if (grade < 0 or grade > 1500)
+                    {
+                        j++;
+                        if (j == 4)
+                        {
+                            cout<<"\n\n";
+                            goto system;
+                        }
+                        else
+                        {
+                            cout << "Invalid range of grades, please re-enter a valid grade : ";
+                            goto check;
+                        }
+                    }
+                }
+                student_data.push_back(make_pair(name, grade));
+            }
+            cout << "Students were added successfully to system !\n\n";
+            goto system;
+        }
+        case 2:
+        {
+            cout << "Please enter the name of the student : ";
+            getline(cin >> ws, name);
+            for (int g = 0; g < student_data.size(); g++)
+            {
+                if (student_data[g].first == name)
+                {
+                    position1 = g;
+                    name_exist = 1;
+                    break;
+                } else
+                    name_exist = 0;
+            }
+            if (name_exist)
+            {
+                cout << "1. Modify Name\n" << "2. Modify grade";
+                cin >> f;
+                switch (f)
+                {
+                    case 1:
+                    {
+                        cout << "Please enter the new name : ";
+                        getline(cin >> ws, student_data[position1].first);
+                        cout << "Student's name was modified successfully !\n\n";
+                        goto system;
+                    }
+                    case 2:
+                    {
+                        cout << "Please enter the new grade : ";
+                        check1:
+                        cin >> student_data[position1].second;
+                        if (student_data[position1].second < 0 or student_data[position1].second > 1500)
+                        {
+                            j++;
+                            if (j == 4)
+                                goto system;
+                            else
+                            {
+                                cout << "Invalid Range, please re-enter a valid grade . ";
+                                goto check1;
+                            }
+                        }
+                        else
+                        {
+                            cout << "Student's data was modified successfully ! \n\n";
+                            goto system;
+                        }
+                    }
+
+                }
+
+            }
+            else
+            {
+                cout << "Student isn't assigned! do you want to add her/him ?\n";
+                goto system;
+            }
+
+        }
+        case 3:
+        {
+          cout<<"Please enter the name of the student : ";
+           getline(cin >> ws, name);
+
+            for (int g = 0; g < student_data.size(); g++)
+            {
+                if (student_data[g].first == name)
+                {
+                    position2 = g;
+                    name_exist = 1;
+                    break;
+                } else
+                    name_exist = 0;
+            }
+            if(name_exist)
+            {
+                student_data[position2].second=0;
+                cout<<"Student's grade was successfully reset to 0 !\n\n";
+            }
+            else
+            {
+                cout<<"Student isn't assigned yet! Do you want to add her/him ?\n\n";
+            }
+            goto system;
+        }
+        case 4:
+        {
+            cout<<"Please enter the name of the student : ";
+            getline(cin >> ws , name);
+            for (int g = 0; g < student_data.size(); g++)
+            {
+                if (student_data[g].first == name)
+                {
+                    position3 = g;
+                    name_exist = 1;
+                    break;
+                } else
+                    name_exist = 0;
+            }
+            if(name_exist)
+            {
+                cout<<"The grade of student: "<<student_data[position3].first<<" - "<<student_data[position3].second<<"\n\n";
+            }
+            else
+            {
+                cout<<"Student isn't assigned yet !\n\n ";
+            }
+            goto system;
+        }
+        case 5:
+        {
+            if(student_data.empty())
+            {
+                cout<<"No data to show . \n";
+            }
+            else {
+                sort(student_data.begin(), student_data.end(), compare);
+                for (int g = 0; g < student_data.size(); g++) {
+                    cout << student_data[g].first << "  " << student_data[g].second << '\n';
+                }
+            }
+            cout<<"\n";
+            goto system;
+        }
+        case 6:
+            break;
+
+    }
+    return 0;
+}
